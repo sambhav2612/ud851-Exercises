@@ -30,16 +30,9 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     final static String GITHUB_BASE_URL =
-            "https://api.github.com/search/repositories";
+            "https://api.github.com/search/users";
 
     final static String PARAM_QUERY = "q";
-
-    /*
-     * The sort field. One of stars, forks, or updated.
-     * Default: results are sorted by best match if no field is specified.
-     */
-    final static String PARAM_SORT = "sort";
-    final static String sortBy = "stars";
 
     /**
      * Builds the URL used to query GitHub.
@@ -50,7 +43,6 @@ public class NetworkUtils {
     public static URL buildUrl(String githubSearchQuery) {
         Uri builtUri = Uri.parse(GITHUB_BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
-                .appendQueryParameter(PARAM_SORT, sortBy)
                 .build();
 
         URL url = null;

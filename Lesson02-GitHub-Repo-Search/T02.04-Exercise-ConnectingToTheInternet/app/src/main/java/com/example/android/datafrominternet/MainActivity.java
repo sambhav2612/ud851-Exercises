@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,14 +50,19 @@ public class MainActivity extends AppCompatActivity {
      * This method retrieves the search text from the EditText, constructs
      * the URL (using {@link NetworkUtils}) for the github repository you'd like to find, displays
      * that URL in a TextView, and finally fires off an AsyncTask to perform the GET request using
-     * our (not yet created) {@link GithubQueryTask}
+     * our (not yet created)
      */
-    private void makeGithubSearchQuery() {
+    private void makeGithubSearchQuery() throws IOException {
         String githubQuery = mSearchBoxEditText.getText().toString();
         URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
         mUrlDisplayTextView.setText(githubSearchUrl.toString());
-        // TODO (2) Call getResponseFromHttpUrl and display the results in mSearchResultsTextView
-        // TODO (3) Surround the call to getResponseFromHttpUrl with a try / catch block to catch an IOException
+        // COMPLETED (2) Call getResponseFromHttpUrl and display the results in mSearchResultsTextView
+        try {
+            mSearchResultsTextView.setText(NetworkUtils.getResponseFromHttpUrl(githubSearchUrl));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // COMPLETED (3) Surround the call to getResponseFromHttpUrl with a try / catch block to catch an IOException
     }
 
     @Override
@@ -69,7 +75,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_search) {
-            makeGithubSearchQuery();
+            try {
+                makeGithubSearchQuery();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
